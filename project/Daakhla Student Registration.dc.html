@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500&family=Noto+Nastaliq+Urdu:wght@600&display=swap" rel="stylesheet">
+<style>body{margin:0;background:#E7E3D8;font-family:Manrope,sans-serif}a{color:#0E5A3A}a:hover{color:#0A4029}*{box-sizing:border-box}input,select,button{font-family:Manrope,sans-serif}::-webkit-scrollbar{display:none}</style>
+</helmet>
+<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px 20px">
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;position:relative;display:flex;flex-direction:column;background:#F5F3EC;color:#14231C;font-family:Manrope,sans-serif">
+
+<sc-if value="{{ is.register }}">
+<div data-screen-label="Registration" style="flex:1;display:flex;flex-direction:column;min-height:0">
+  <div style="padding:56px 20px 14px;display:flex;flex-direction:column;gap:14px;background:#F5F3EC">
+    <div style="display:flex;align-items:center;gap:8px">
+      <div style="flex:1;min-width:0;height:34px;border-radius:99px;background:#EAE6DB;display:flex;align-items:center;justify-content:center;gap:6px;font:500 12px 'IBM Plex Mono',monospace;color:#3C4841"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 018 0v4"></path></svg>{{ formLink.url }}</div>
+      <sc-if value="{{ isPreview }}"><button onClick="{{ exitPreview }}" style="flex:none;height:34px;padding:0 12px;border-radius:99px;border:none;background:#14231C;color:#fff;font-size:12px;font-weight:800;cursor:pointer">Exit preview</button></sc-if>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;min-height:40px">
+      <sc-if value="{{ showBack }}"><button onClick="{{ back }}" style="width:40px;height:40px;border-radius:99px;border:1.5px solid #E4E0D5;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#14231C"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg></button></sc-if>
+      <div style="display:flex;flex-direction:column">
+        <span style="font-size:12px;color:#5E6B63;font-weight:600">{{ formLink.region }} registration · Step {{ stepNum }} of 4</span>
+        <span style="font-size:18px;font-weight:800;letter-spacing:-0.02em">{{ stepTitle }}</span>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px">
+      <sc-for list="{{ progress }}" as="p" hint-placeholder-count="4"><div style="height:4px;border-radius:4px;background:{{ p.bg }}"></div></sc-for>
+    </div>
+  </div>
+  <div ref="{{ scrollRef }}" style="flex:1;overflow:auto;padding:8px 20px 24px;display:flex;flex-direction:column;gap:16px">
+
+    <sc-if value="{{ st.s0 }}">
+      <label style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:700">Full name</span>
+        <input value="{{ f.fullName }}" onChange="{{ h.fullName }}" placeholder="As on CNIC / B-Form" style="height:50px;padding:0 14px;border-radius:14px;border:1.5px solid {{ bd.fullName }};background:#fff;font-size:15px;font-weight:500;color:#14231C;outline:none">
+        <sc-if value="{{ e.fullName }}"><span style="font-size:12px;color:#B3261E;font-weight:600">{{ e.fullName }}</span></sc-if></label>
+      <label style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:700">Father's name</span>
+        <input value="{{ f.fatherName }}" onChange="{{ h.fatherName }}" placeholder="Father / guardian name" style="height:50px;padding:0 14px;border-radius:14px;border:1.5px solid {{ bd.fatherName }};background:#fff;font-size:15px;font-weight:500;color:#14231C;outline:none">
+        <sc-if value="{{ e.fatherName }}"><span style="font-size:12px;color:#B3261E;font-weight:600">{{ e.fatherName }}</span></sc-if></label>
+      <label style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:700">CNIC / B-Form number</span>
+        <input value="{{ f.cnic }}" onChange="{{ h.cnic }}" inputmode="numeric" placeholder="35202-1234567-1" style="height:50px;padding:0 14px;border-radius:14px;border:1.5px solid {{ bd.cnic }};background:#fff;font-size:15px;font-weight:500;color:#14231C;outline:none;font-family:'IBM Plex Mono',monospace">
+        <sc-if value="{{ e.cnic }}"><span style="font-size:12px;color:#B3261E;font-weight:600">{{ e.cnic }}</span></sc-if></label>
+      <label style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:700">Date of birth</span>
+        <input type="date" value="{{ f.dob }}" onChange="{{ h.dob }}" style="height:50px;padding:0 14px;border-radius:14px;border:1.5px solid {{ bd.dob }};background:#fff;font-size:15px;font-weight:500;color:#14231C;outline:none">
+        <sc-if value="{{ e.dob }}"><span style="font-size:12px;color:#B3261E;font-weight:600">{{ e.dob }}</span></sc-if></label>
+      <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:700">Gender</span>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <sc-for list="{{ genderOpts }}" as="c" hint-placeholder-count="2"><button onClick="{{ c.onClick }}" style="height:48px;border-radius:14px;border:1.5px solid {{ c.bd }};background:{{ c.bg }};color:{{ c.fg }};font-size:15px;font-weight:700;cursor:pointer">{{ c.label }}</button></sc-for>
+        </div>
+        <sc-if value="{{ e.gender }}"><span style="font-size:12px;color:#B3261E;font-weight:600">{{ e.gender }}</span></sc-if></div>
+    </sc-if>
+
+    <sc-if value="{{ st.s1 }}">
+      <label style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:700">Mobile number</span>
+        <input value="{{ f.phone }}" onChange="{{ h.phone }}" inputmode="numeric" placeholder="0300-1234567" style="height:50px;padding:0 14px;border-radius:14px;border:1.5px solid {{ bd.phone }};background:#fff;font-size:15px;font-weight:500;color:#14231C;outline:none;font-family:'IBM Plex Mono',monospace">
+        <sc-if value="{{ e.phone }}"><span style="font-size:12px;color:#B3261E;font-weight:600">{{ e.phone }}</span></sc-if></label>
+      <label style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:700">Email</span>
+        <input type="email" value="{{ f.email }}" onChange="{{ h.email }}" placeholder="name@example.com" style="height:50px;padding:0 14px;border-radius:14px;border:1.5px solid {{ bd.email }};background:#fff;font-size:15px;font-weight:500;color:#14231C;outline:none">
+        <sc-if value="{{ e.email }}"><span style="font-size:12px;color:#B3261E;font-weight:600">{{ e.email }}</span></sc-if></label>
+      <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:700">Province / region</span>
+        <div style="height:50px;padding:0 14px;border-radius:14px;background:#E3EEE7;display:flex;align-items:center;justify-content:space-between;color:#0E5A3A;font-size:15px;font-weight:700"><span>{{ formLink.region }}</span><span style="font-size:12px;font-weight:700">Set by your link</span></div></div>
+      <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:700">City</span>
+        <sc-if value="{{ hasCityOpts }}">
+          <div style="display:flex;flex-wrap:wrap;gap:8px">
+            <sc-for list="{{ cityOpts }}" as="c"><button onClick="{{ c.onClick }}" style="height:40px;padding:0 14px;border-radius:99px;border:1.5px solid {{ c.bd }};background:{{ c.bg }};color:{{ c.fg }};font-size:14px;font-weight:700;cursor:pointer">{{ c.label }}</button></sc-for>
+          </div>
+        </sc-if>
+        <sc-if value="{{ noCityOpts }}"><span style="font-size:13px;color:#5E6B63">Choose a province first</span></sc-if>
+        <sc-if value="{{ e.city }}"><span style="font-size:12px;color:#B3261E;font-weight:600">{{ e.city }}</span></sc-if></div>
+      <label style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:700">Home address</span>
+        <input value="{{ f.address }}" onChange="{{ h.address }}" placeholder="House, street, area" style="height:50px;padding:0 14px;border-radius:14px;border:1.5px solid {{ bd.address }};background:#fff;font-size:15px;font-weight:500;color:#14231C;outline:none">
+        <sc-if value="{{ e.address }}"><span style="font-size:12px;color:#B3261E;font-weight:600">{{ e.address }}</span></sc-if></label>
+    </sc-if>
+
+    <sc-if value="{{ st.s2 }}">
+      <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:700">Applying for level</span>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <sc-for list="{{ levelOpts }}" as="c" hint-placeholder-count="4"><button onClick="{{ c.onClick }}" style="height:46px;border-radius:14px;border:1.5px solid {{ c.bd }};background:{{ c.bg }};color:{{ c.fg }};font-size:14px;font-weight:700;cursor:pointer">{{ c.label }}</button></sc-for>
+        </div>
+        <sc-if value="{{ e.level }}"><span style="font-size:12px;color:#B3261E;font-weight:600">{{ e.level }}</span></sc-if></div>
+      <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:700">Program category</span>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <sc-for list="{{ programOpts }}" as="c" hint-placeholder-count="5"><button onClick="{{ c.onClick }}" style="height:48px;padding:0 16px;border-radius:14px;border:1.5px solid {{ c.bd }};background:{{ c.bg }};color:{{ c.fg }};font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:space-between"><span>{{ c.label }}</span><span style="width:18px;height:18px;border-radius:99px;border:2px solid {{ c.bd }};background:{{ c.dot }}"></span></button></sc-for>
+        </div>
+        <sc-if value="{{ e.program }}"><span style="font-size:12px;color:#B3261E;font-weight:600">{{ e.program }}</span></sc-if></div>
+      <label style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:700">Current / last institution</span>
+        <input value="{{ f.institution }}" onChange="{{ h.institution }}" placeholder="School, college or university" style="height:50px;padding:0 14px;border-radius:14px;border:1.5px solid {{ bd.institution }};background:#fff;font-size:15px;font-weight:500;color:#14231C;outline:none">
+        <sc-if value="{{ e.institution }}"><span style="font-size:12px;color:#B3261E;font-weight:600">{{ e.institution }}</span></sc-if></label>
+      <label style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:700">Last exam result (%)</span>
+        <input value="{{ f.marks }}" onChange="{{ h.marks }}" inputmode="decimal" placeholder="e.g. 82" style="height:50px;padding:0 14px;border-radius:14px;border:1.5px solid {{ bd.marks }};background:#fff;font-size:15px;font-weight:500;color:#14231C;outline:none">
+        <sc-if value="{{ e.marks }}"><span style="font-size:12px;color:#B3261E;font-weight:600">{{ e.marks }}</span></sc-if></label>
+    </sc-if>
+
+    <sc-if value="{{ st.s3 }}">
+      <sc-for list="{{ review }}" as="sec" hint-placeholder-count="3">
+        <div style="background:#fff;border:1.5px solid #E4E0D5;border-radius:18px;padding:6px 16px">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0 6px">
+            <span style="font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:#5E6B63">{{ sec.title }}</span>
+            <button onClick="{{ sec.onEdit }}" style="border:none;background:none;color:#0E5A3A;font-size:13px;font-weight:700;cursor:pointer;padding:4px">Edit</button>
+          </div>
+          <sc-for list="{{ sec.rows }}" as="r"><div style="display:flex;justify-content:space-between;gap:16px;padding:9px 0;border-top:1px solid #EFECE3;font-size:14px"><span style="color:#5E6B63">{{ r.k }}</span><span style="font-weight:700;text-align:right">{{ r.v }}</span></div></sc-for>
+        </div>
+      </sc-for>
+      <button onClick="{{ toggleConsent }}" style="display:flex;gap:12px;align-items:flex-start;text-align:left;border:none;background:none;padding:4px 0;cursor:pointer;color:#14231C">
+        <span style="flex:none;width:22px;height:22px;border-radius:7px;border:2px solid {{ consentBd }};background:{{ consentBg }};display:flex;align-items:center;justify-content:center;color:#fff"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"></path></svg></span>
+        <span style="font-size:13px;line-height:1.45;color:#3C4841">I confirm the details above are correct and match my CNIC / B-Form.</span>
+      </button>
+      <sc-if value="{{ e.consent }}"><span style="font-size:12px;color:#B3261E;font-weight:600;margin-top:-8px">{{ e.consent }}</span></sc-if>
+    </sc-if>
+  </div>
+  <div style="padding:12px 20px 38px;border-top:1px solid #E4E0D5;background:#F5F3EC">
+    <button onClick="{{ next }}" style="width:100%;height:54px;border:none;border-radius:16px;background:#0E5A3A;color:#fff;font-size:16px;font-weight:800;cursor:pointer" style-active="transform:scale(0.98)">{{ nextLabel }}</button>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ is.success }}">
+<div data-screen-label="Submitted" style="flex:1;display:flex;flex-direction:column;padding:96px 24px 40px;gap:20px">
+  <div style="width:64px;height:64px;border-radius:99px;background:#0E5A3A;color:#fff;display:flex;align-items:center;justify-content:center"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"></path></svg></div>
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <h1 style="margin:0;font-size:30px;font-weight:800;letter-spacing:-0.03em">Registration submitted</h1>
+    <p style="margin:0;font-size:15px;line-height:1.5;color:#5E6B63;text-wrap:pretty">Thank you, {{ lastSub.first }}. Your details were sent to the {{ lastSub.province }} admissions team for verification.</p>
+  </div>
+  <div style="background:#fff;border:1.5px solid #E4E0D5;border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:6px">
+    <span style="font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:#5E6B63">Registration ID</span>
+    <span style="font:500 24px 'IBM Plex Mono',monospace;color:#0E5A3A">{{ lastSub.id }}</span>
+    <span style="font-size:13px;color:#5E6B63">{{ lastSub.program }} · {{ lastSub.city }}</span>
+  </div>
+  <div style="flex:1"></div>
+  <button onClick="{{ submitAnother }}" style="height:54px;border:none;border-radius:16px;background:#0E5A3A;color:#fff;font-size:16px;font-weight:800;cursor:pointer">Submit another response</button>
+  <sc-if value="{{ isPreview }}"><button onClick="{{ exitPreview }}" style="width:100%;height:54px;border-radius:16px;border:1.5px solid #E4E0D5;background:#fff;color:#14231C;font-size:16px;font-weight:700;cursor:pointer">Exit preview · back to admin</button></sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ is.login }}">
+<div data-screen-label="Admin login" style="flex:1;display:flex;flex-direction:column;padding:76px 20px 40px;gap:22px;overflow:auto">
+  <div style="display:flex;align-items:center;gap:10px">
+    <div style="width:40px;height:40px;border-radius:12px;background:#0E5A3A;color:#fff;display:flex;align-items:center;justify-content:center;font:600 17px 'Noto Nastaliq Urdu',serif;line-height:1">داخلہ</div>
+    <div style="display:flex;flex-direction:column"><span style="font-weight:800;font-size:18px;letter-spacing:-0.02em">Daakhla Admin</span><span style="font-size:12px;color:#5E6B63">Student registrations · Pakistan</span></div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:8px;margin-top:18px">
+    <h1 style="margin:0;font-size:30px;font-weight:800;letter-spacing:-0.03em">Sign in</h1>
+    <p style="margin:0;font-size:15px;line-height:1.5;color:#5E6B63">Each admin sees the regions assigned to them.</p>
+  </div>
+  <label style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:700">Email</span>
+    <input value="{{ login.email }}" onChange="{{ onLoginEmail }}" placeholder="you@daakhla.pk" style="height:50px;padding:0 14px;border-radius:14px;border:1.5px solid {{ loginBd }};background:#fff;font-size:15px;font-weight:500;color:#14231C;outline:none"></label>
+  <label style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:700">Password</span>
+    <input type="password" value="{{ login.pw }}" onChange="{{ onLoginPw }}" placeholder="••••••••" style="height:50px;padding:0 14px;border-radius:14px;border:1.5px solid {{ loginBd }};background:#fff;font-size:15px;font-weight:500;color:#14231C;outline:none"></label>
+  <sc-if value="{{ login.error }}"><span style="font-size:13px;color:#B3261E;font-weight:600;margin-top:-10px">{{ login.error }}</span></sc-if>
+  <button onClick="{{ doLogin }}" style="height:54px;border:none;border-radius:16px;background:#0E5A3A;color:#fff;font-size:16px;font-weight:800;cursor:pointer">Sign in</button>
+  <sc-if value="{{ showDemo }}">
+    <div style="display:flex;flex-direction:column;gap:10px;margin-top:6px">
+      <span style="font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:#5E6B63">Demo admin accounts · tap to fill</span>
+      <div style="background:#fff;border:1.5px solid #E4E0D5;border-radius:18px;overflow:hidden">
+        <sc-for list="{{ demoAdmins }}" as="a" hint-placeholder-count="4">
+          <button onClick="{{ a.onFill }}" style="width:100%;display:flex;align-items:center;gap:12px;padding:12px 14px;border:none;border-bottom:1px solid #EFECE3;background:none;text-align:left;cursor:pointer;color:#14231C" style-hover="background:#FAF9F5">
+            <span style="flex:none;width:36px;height:36px;border-radius:99px;background:#E3EEE7;color:#0E5A3A;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800">{{ a.initials }}</span>
+            <span style="flex:1;display:flex;flex-direction:column;min-width:0"><span style="font-size:14px;font-weight:700">{{ a.name }}</span><span style="font-size:12px;color:#5E6B63">{{ a.email }} · {{ a.password }}</span></span>
+            <span style="font-size:11px;font-weight:800;color:#0E5A3A;background:#E3EEE7;padding:4px 8px;border-radius:99px">{{ a.scopeShort }}</span>
+          </button>
+        </sc-for>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ is.dash }}">
+<div data-screen-label="Admin dashboard" style="flex:1;display:flex;flex-direction:column;min-height:0">
+  <div ref="{{ scrollRef }}" style="flex:1;overflow:auto;display:flex;flex-direction:column">
+
+    <sc-if value="{{ tab.overview }}">
+      <div style="padding:62px 20px 28px;display:flex;flex-direction:column;gap:22px">
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <span style="font-size:13px;color:#5E6B63;font-weight:600">Salam, {{ admin.first }}</span>
+          <h1 style="margin:0;font-size:28px;font-weight:800;letter-spacing:-0.03em">{{ admin.scopeLabel }}</h1>
+        </div>
+        <div style="background:#0E5A3A;color:#fff;border-radius:24px;padding:20px;display:flex;flex-direction:column;gap:16px">
+          <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:13px;color:#BFE0CC;font-weight:600">Total registrations</span><span style="font-size:48px;font-weight:800;letter-spacing:-0.04em;line-height:1">{{ stats.total }}</span></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <button onClick="{{ viewPending }}" style="border:none;cursor:pointer;text-align:left;background:rgba(255,255,255,0.12);color:#fff;border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:2px"><span style="font-size:22px;font-weight:800">{{ stats.pending }}</span><span style="font-size:12px;color:#DCEFE3;font-weight:600">Awaiting review</span></button>
+            <div style="background:rgba(255,255,255,0.12);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:2px"><span style="font-size:22px;font-weight:800">{{ stats.verified }}</span><span style="font-size:12px;color:#DCEFE3;font-weight:600">Verified</span></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <span style="font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:#5E6B63">{{ regionHeading }}</span>
+          <div style="background:#fff;border:1.5px solid #E4E0D5;border-radius:20px;overflow:hidden">
+            <sc-for list="{{ regionRows }}" as="r" hint-placeholder-count="7">
+              <button onClick="{{ r.onClick }}" style="width:100%;display:flex;flex-direction:column;gap:8px;padding:13px 16px;border:none;border-bottom:1px solid #EFECE3;background:none;text-align:left;cursor:pointer;color:#14231C" style-hover="background:#FAF9F5">
+                <div style="display:flex;justify-content:space-between;align-items:baseline;width:100%"><span style="font-size:15px;font-weight:700">{{ r.name }}</span><span style="font-size:14px;font-weight:800">{{ r.count }}</span></div>
+                <div style="height:6px;border-radius:6px;background:#EFECE3;width:100%;overflow:hidden"><div style="height:100%;border-radius:6px;background:#0E5A3A;width:{{ r.pct }}"></div></div>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <span style="font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:#5E6B63">By program</span>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <sc-for list="{{ programRows }}" as="p" hint-placeholder-count="5">
+              <button onClick="{{ p.onClick }}" style="background:#fff;border:1.5px solid #E4E0D5;border-radius:16px;padding:14px;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:4px;color:#14231C" style-hover="border-color:#0E5A3A"><span style="font-size:24px;font-weight:800;letter-spacing:-0.02em">{{ p.count }}</span><span style="font-size:13px;color:#5E6B63;font-weight:600">{{ p.name }}</span></button>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ tab.students }}">
+      <div style="position:sticky;top:0;z-index:5;background:#F5F3EC;padding:60px 20px 12px;display:flex;flex-direction:column;gap:12px;border-bottom:1px solid #E4E0D5">
+        <div style="display:flex;align-items:baseline;justify-content:space-between"><h1 style="margin:0;font-size:26px;font-weight:800;letter-spacing:-0.03em">Students</h1><span style="font-size:13px;color:#5E6B63;font-weight:700">{{ listCount }} shown</span></div>
+        <div style="display:flex;align-items:center;gap:8px;height:44px;padding:0 14px;border-radius:14px;background:#fff;border:1.5px solid #E4E0D5;color:#5E6B63">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+          <input value="{{ q }}" onChange="{{ onSearch }}" placeholder="Name, ID, CNIC or institution" style="flex:1;border:none;outline:none;background:none;font-size:14px;font-weight:500;color:#14231C;min-width:0">
+        </div>
+        <div style="display:flex;gap:6px;overflow-x:auto;margin:0 -20px;padding:0 20px">
+          <sc-for list="{{ regionChips }}" as="c" hint-placeholder-count="6"><button onClick="{{ c.onClick }}" style="flex:none;height:34px;padding:0 13px;border-radius:99px;border:1.5px solid {{ c.bd }};background:{{ c.bg }};color:{{ c.fg }};font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap">{{ c.label }}</button></sc-for>
+        </div>
+        <div style="display:flex;gap:6px;overflow-x:auto;margin:0 -20px;padding:0 20px">
+          <sc-for list="{{ progChips }}" as="c" hint-placeholder-count="6"><button onClick="{{ c.onClick }}" style="flex:none;height:30px;padding:0 11px;border-radius:9px;border:none;background:{{ c.bg2 }};color:{{ c.fg2 }};font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap">{{ c.label }}</button></sc-for>
+        </div>
+      </div>
+      <div style="padding:8px 20px 28px;display:flex;flex-direction:column;gap:18px">
+        <sc-if value="{{ noResults }}"><div style="padding:40px 0;text-align:center;color:#5E6B63;font-size:14px">No students match these filters.</div></sc-if>
+        <sc-for list="{{ groups }}" as="g" hint-placeholder-count="3">
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;align-items:baseline;justify-content:space-between;padding:8px 2px 0">
+              <span style="font-size:16px;font-weight:800;letter-spacing:-0.01em">{{ g.city }} <span style="font-size:13px;font-weight:600;color:#5E6B63">· {{ g.province }}</span></span>
+              <span style="font-size:13px;font-weight:800;color:#0E5A3A">{{ g.count }}</span>
+            </div>
+            <div style="background:#fff;border:1.5px solid #E4E0D5;border-radius:18px;overflow:hidden">
+              <sc-for list="{{ g.items }}" as="s">
+                <button onClick="{{ s.onOpen }}" style="width:100%;display:flex;align-items:center;gap:12px;padding:12px 14px;border:none;border-bottom:1px solid #EFECE3;background:none;text-align:left;cursor:pointer;color:#14231C" style-hover="background:#FAF9F5">
+                  <span style="flex:none;width:38px;height:38px;border-radius:99px;background:#E3EEE7;color:#0E5A3A;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800">{{ s.initials }}</span>
+                  <span style="flex:1;display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ s.name }}</span><span style="font-size:12px;color:#5E6B63;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ s.program }} · {{ s.level }}</span></span>
+                  <span style="flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:4px"><span style="font:500 11px 'IBM Plex Mono',monospace;color:#5E6B63">{{ s.id }}</span><span style="font-size:11px;font-weight:800;padding:2px 7px;border-radius:99px;background:{{ s.stBg }};color:{{ s.stFg }}">{{ s.status }}</span></span>
+                </button>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ tab.links }}">
+      <div style="padding:62px 20px 28px;display:flex;flex-direction:column;gap:18px">
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <h1 style="margin:0;font-size:26px;font-weight:800;letter-spacing:-0.03em">Registration links</h1>
+          <p style="margin:0;font-size:14px;line-height:1.5;color:#5E6B63;text-wrap:pretty">Share a region's link or QR code with students. Every submission is filed under that region automatically.</p>
+        </div>
+        <sc-for list="{{ links }}" as="l" hint-placeholder-count="3">
+          <div style="background:#fff;border:1.5px solid #E4E0D5;border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:14px">
+            <div style="display:flex;gap:14px;align-items:center">
+              <button onClick="{{ l.onQr }}" style="flex:none;width:72px;height:72px;padding:6px;border:1.5px solid #E4E0D5;border-radius:12px;background:#fff;cursor:pointer">
+                <div style="display:grid;grid-template-columns:repeat(21,1fr);grid-template-rows:repeat(21,1fr);width:100%;height:100%"><sc-for list="{{ l.qr }}" as="c"><div style="background:{{ c.b }}"></div></sc-for></div>
+              </button>
+              <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px">
+                <span style="font-size:16px;font-weight:800;letter-spacing:-0.01em">{{ l.name }}</span>
+                <span style="font:500 12px 'IBM Plex Mono',monospace;color:#0E5A3A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ l.url }}</span>
+                <span style="font-size:12px;color:#5E6B63;font-weight:600">{{ l.count }} registrations · {{ l.pending }} pending</span>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+              <button onClick="{{ l.onCopy }}" style="height:40px;border-radius:12px;border:1.5px solid #E4E0D5;background:#fff;color:#14231C;font-size:13px;font-weight:700;cursor:pointer">Copy link</button>
+              <button onClick="{{ l.onQr }}" style="height:40px;border-radius:12px;border:1.5px solid #E4E0D5;background:#fff;color:#14231C;font-size:13px;font-weight:700;cursor:pointer">QR code</button>
+              <button onClick="{{ l.onOpen }}" style="height:40px;border-radius:12px;border:none;background:#E3EEE7;color:#0E5A3A;font-size:13px;font-weight:800;cursor:pointer">Preview form</button>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ tab.admins }}">
+      <div style="padding:62px 20px 28px;display:flex;flex-direction:column;gap:20px">
+        <h1 style="margin:0;font-size:26px;font-weight:800;letter-spacing:-0.03em">Admin accounts</h1>
+        <div style="background:#fff;border:1.5px solid #E4E0D5;border-radius:20px;padding:16px;display:flex;align-items:center;gap:12px">
+          <span style="flex:none;width:46px;height:46px;border-radius:99px;background:#0E5A3A;color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800">{{ admin.initials }}</span>
+          <span style="flex:1;display:flex;flex-direction:column;min-width:0"><span style="font-size:15px;font-weight:800">{{ admin.name }}</span><span style="font-size:12px;color:#5E6B63">{{ admin.role }} · {{ admin.scopeLabel }}</span></span>
+          <button onClick="{{ logout }}" style="height:36px;padding:0 12px;border-radius:10px;border:1.5px solid #E4E0D5;background:#fff;color:#B3261E;font-size:13px;font-weight:800;cursor:pointer">Sign out</button>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span style="font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:#5E6B63">All admins · {{ adminCount }}</span>
+            <sc-if value="{{ canManage }}"><button onClick="{{ toggleAdd }}" style="border:none;background:none;color:#0E5A3A;font-size:13px;font-weight:800;cursor:pointer;padding:4px">{{ addLabel }}</button></sc-if>
+          </div>
+          <sc-if value="{{ showAdd }}">
+            <div style="background:#fff;border:1.5px solid #0E5A3A;border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:10px">
+              <input value="{{ na.name }}" onChange="{{ naH.name }}" placeholder="Full name" style="height:46px;padding:0 12px;border-radius:12px;border:1.5px solid #E4E0D5;font-size:14px;font-weight:500;outline:none;color:#14231C">
+              <input value="{{ na.email }}" onChange="{{ naH.email }}" placeholder="Email" style="height:46px;padding:0 12px;border-radius:12px;border:1.5px solid #E4E0D5;font-size:14px;font-weight:500;outline:none;color:#14231C">
+              <input value="{{ na.password }}" onChange="{{ naH.password }}" placeholder="Temporary password" style="height:46px;padding:0 12px;border-radius:12px;border:1.5px solid #E4E0D5;font-size:14px;font-weight:500;outline:none;color:#14231C">
+              <select value="{{ na.scope }}" onChange="{{ naH.scope }}" style="height:46px;padding:0 10px;border-radius:12px;border:1.5px solid #E4E0D5;font-size:14px;font-weight:500;outline:none;background:#fff;color:#14231C">
+                <option value="all">All regions (Super admin)</option>
+                <sc-for list="{{ provOpts }}" as="o"><option value="{{ o.v }}">{{ o.l }} only</option></sc-for>
+              </select>
+              <sc-if value="{{ naError }}"><span style="font-size:12px;color:#B3261E;font-weight:600">{{ naError }}</span></sc-if>
+              <button onClick="{{ addAdmin }}" style="height:48px;border:none;border-radius:14px;background:#0E5A3A;color:#fff;font-size:15px;font-weight:800;cursor:pointer">Create admin</button>
+            </div>
+          </sc-if>
+          <div style="background:#fff;border:1.5px solid #E4E0D5;border-radius:20px;overflow:hidden">
+            <sc-for list="{{ adminRows }}" as="a" hint-placeholder-count="4">
+              <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid #EFECE3">
+                <span style="flex:none;width:36px;height:36px;border-radius:99px;background:#E3EEE7;color:#0E5A3A;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800">{{ a.initials }}</span>
+                <span style="flex:1;display:flex;flex-direction:column;min-width:0"><span style="font-size:14px;font-weight:700">{{ a.name }}{{ a.you }}</span><span style="font-size:12px;color:#5E6B63">{{ a.email }}</span></span>
+                <span style="font-size:11px;font-weight:800;color:#0E5A3A;background:#E3EEE7;padding:4px 8px;border-radius:99px">{{ a.scopeShort }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <sc-if value="{{ cantManage }}"><span style="font-size:12px;color:#5E6B63">Only super admins can add accounts.</span></sc-if>
+        </div>
+      </div>
+    </sc-if>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);padding:8px 8px 30px;background:#fff;border-top:1px solid #E4E0D5">
+    <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="3">
+      <button onClick="{{ t.onClick }}" style="border:none;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 0;color:{{ t.fg }}">
+        <span style="width:44px;height:28px;border-radius:99px;background:{{ t.bg }};display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800">{{ t.glyph }}</span>
+        <span style="font-size:11px;font-weight:800">{{ t.label }}</span>
+      </button>
+    </sc-for>
+  </div>
+
+  <sc-if value="{{ qrSheet }}">
+    <div style="position:absolute;inset:0;z-index:70;display:flex;flex-direction:column;justify-content:flex-end">
+      <div onClick="{{ closeQr }}" style="position:absolute;inset:0;background:rgba(20,35,28,0.45)"></div>
+      <div style="position:relative;background:#F5F3EC;border-radius:28px 28px 0 0;padding:10px 20px 36px;display:flex;flex-direction:column;align-items:center;gap:16px">
+        <div style="width:40px;height:5px;border-radius:9px;background:#D5D0C3"></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center"><span style="font-size:20px;font-weight:800;letter-spacing:-0.02em">{{ qrSheet.name }}</span><span style="font-size:13px;color:#5E6B63">Students scan to open the {{ qrSheet.name }} form</span></div>
+        <div style="width:236px;height:236px;padding:16px;background:#fff;border-radius:20px;border:1.5px solid #E4E0D5">
+          <div style="display:grid;grid-template-columns:repeat(21,1fr);grid-template-rows:repeat(21,1fr);width:100%;height:100%"><sc-for list="{{ qrSheet.qr }}" as="c"><div style="background:{{ c.b }}"></div></sc-for></div>
+        </div>
+        <span style="font:500 13px 'IBM Plex Mono',monospace;color:#0E5A3A">{{ qrSheet.url }}</span>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%">
+          <button onClick="{{ qrSheet.onCopy }}" style="height:50px;border-radius:14px;border:1.5px solid #E4E0D5;background:#fff;color:#14231C;font-size:15px;font-weight:700;cursor:pointer">Copy link</button>
+          <button onClick="{{ qrSheet.onSave }}" style="height:50px;border:none;border-radius:14px;background:#0E5A3A;color:#fff;font-size:15px;font-weight:800;cursor:pointer">Save QR image</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+  <sc-if value="{{ toast }}"><div style="position:absolute;top:60px;left:50%;transform:translateX(-50%);z-index:90;background:#14231C;color:#fff;padding:10px 16px;border-radius:99px;font-size:13px;font-weight:700;white-space:nowrap">{{ toast }}</div></sc-if>
+
+  <sc-if value="{{ sel }}">
+    <div style="position:absolute;inset:0;z-index:70;display:flex;flex-direction:column;justify-content:flex-end">
+      <div onClick="{{ closeSel }}" style="position:absolute;inset:0;background:rgba(20,35,28,0.45)"></div>
+      <div style="position:relative;background:#F5F3EC;border-radius:28px 28px 0 0;max-height:86%;display:flex;flex-direction:column">
+        <div style="display:flex;justify-content:center;padding:10px 0 4px"><div style="width:40px;height:5px;border-radius:9px;background:#D5D0C3"></div></div>
+        <div style="overflow:auto;padding:10px 20px 20px;display:flex;flex-direction:column;gap:16px">
+          <div style="display:flex;align-items:center;gap:14px">
+            <span style="flex:none;width:54px;height:54px;border-radius:99px;background:#0E5A3A;color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800">{{ sel.initials }}</span>
+            <span style="flex:1;display:flex;flex-direction:column;gap:3px;min-width:0"><span style="font-size:20px;font-weight:800;letter-spacing:-0.02em">{{ sel.name }}</span><span style="font:500 12px 'IBM Plex Mono',monospace;color:#5E6B63">{{ sel.id }} · {{ sel.date }}</span></span>
+            <span style="font-size:12px;font-weight:800;padding:4px 9px;border-radius:99px;background:{{ sel.stBg }};color:{{ sel.stFg }}">{{ sel.status }}</span>
+          </div>
+          <sc-for list="{{ sel.sections }}" as="sec">
+            <div style="background:#fff;border:1.5px solid #E4E0D5;border-radius:18px;padding:4px 16px">
+              <div style="padding:10px 0 6px;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:#5E6B63">{{ sec.title }}</div>
+              <sc-for list="{{ sec.rows }}" as="r"><div style="display:flex;justify-content:space-between;gap:16px;padding:9px 0;border-top:1px solid #EFECE3;font-size:14px"><span style="color:#5E6B63;flex:none">{{ r.k }}</span><span style="font-weight:700;text-align:right">{{ r.v }}</span></div></sc-for>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px 20px 36px;border-top:1px solid #E4E0D5">
+          <button onClick="{{ closeSel }}" style="height:50px;border-radius:14px;border:1.5px solid #E4E0D5;background:#fff;color:#14231C;font-size:15px;font-weight:700;cursor:pointer">Close</button>
+          <button onClick="{{ sel.onToggle }}" style="height:50px;border:none;border-radius:14px;background:#0E5A3A;color:#fff;font-size:15px;font-weight:800;cursor:pointer">{{ sel.toggleLabel }}</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</sc-if>
+
+</div>
+</x-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;startAs&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;admin&quot;,&quot;studentForm&quot;],&quot;default&quot;:&quot;admin&quot;,&quot;tsType&quot;:&quot;'admin'|'studentForm'&quot;},&quot;showDemoAccounts&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  static PROV = [
+    { code: 'PB', name: 'Punjab', short: 'Punjab', cities: ['Lahore', 'Rawalpindi', 'Faisalabad', 'Multan', 'Gujranwala'] },
+    { code: 'SD', name: 'Sindh', short: 'Sindh', cities: ['Karachi', 'Hyderabad', 'Sukkur', 'Larkana'] },
+    { code: 'KP', name: 'Khyber Pakhtunkhwa', short: 'KP', cities: ['Peshawar', 'Abbottabad', 'Mardan', 'Swat'] },
+    { code: 'BL', name: 'Balochistan', short: 'Balochistan', cities: ['Quetta', 'Gwadar', 'Turbat'] },
+    { code: 'IS', name: 'Islamabad Capital Territory', short: 'Islamabad', cities: ['Islamabad'] },
+    { code: 'GB', name: 'Gilgit-Baltistan', short: 'GB', cities: ['Gilgit', 'Skardu', 'Hunza'] },
+    { code: 'AJ', name: 'Azad Jammu & Kashmir', short: 'AJK', cities: ['Muzaffarabad', 'Mirpur'] },
+  ];
+  static PROGRAMS = ['Computer Science', 'Engineering', 'Medical', 'Business', 'Arts & Humanities'];
+  static LEVELS = ['Matric', 'Intermediate', "Bachelor's", "Master's"];
+  static ADMINS = [
+    { id: 'a1', name: 'Ayesha Siddiqui', email: 'ayesha@daakhla.pk', password: 'admin123', role: 'Super admin', scope: 'all' },
+    { id: 'a2', name: 'Bilal Chaudhry', email: 'bilal@daakhla.pk', password: 'punjab123', role: 'Regional admin', scope: 'PB' },
+    { id: 'a3', name: 'Sana Memon', email: 'sana@daakhla.pk', password: 'sindh123', role: 'Regional admin', scope: 'SD' },
+    { id: 'a4', name: 'Imran Khattak', email: 'imran@daakhla.pk', password: 'kp123', role: 'Regional admin', scope: 'KP' },
+  ];
+  static CODES = { PB: 'pb-7k2q', SD: 'sd-4m9x', KP: 'kp-2r8t', BL: 'bl-9c3v', IS: 'is-5h1w', GB: 'gb-8n6p', AJ: 'aj-3d7z' };
+  static qr(code) {
+    const N = 21; let x = [...code].reduce((a, c) => a * 31 + c.charCodeAt(0), 7) % 233280;
+    const r = () => { x = (x * 9301 + 49297) % 233280; return x / 233280; };
+    const fin = (i, j, oi, oj) => { const a = i - oi, b = j - oj; if (a < 0 || b < 0 || a > 6 || b > 6) return null; return a === 0 || a === 6 || b === 0 || b === 6 || (a >= 2 && a <= 4 && b >= 2 && b <= 4); };
+    const out = [];
+    for (let i = 0; i < N; i++) for (let j = 0; j < N; j++) {
+      let v = fin(i, j, 0, 0); if (v === null) v = fin(i, j, 0, 14); if (v === null) v = fin(i, j, 14, 0);
+      const sep = (i <= 7 && j <= 7) || (i <= 7 && j >= 13) || (i >= 13 && j <= 7);
+      if (v === null) v = sep ? false : r() < 0.5;
+      out.push({ b: v ? '#14231C' : 'transparent' });
+    }
+    return out;
+  }
+  static STEPS = ['Personal details', 'Contact & region', 'Academic details', 'Review & submit'];
+  static EMPTY = { fullName: '', fatherName: '', cnic: '', dob: '', gender: '', phone: '', email: '', province: '', city: '', address: '', level: '', program: '', institution: '', marks: '' };
+
+  static seed() {
+    let x = 11; const r = () => { x = (x * 9301 + 49297) % 233280; return x / 233280; };
+    const pick = (a) => a[Math.floor(r() * a.length)];
+    const M = ['Ahmed', 'Hamza', 'Usman', 'Ali', 'Bilal', 'Hassan', 'Zain', 'Faizan', 'Omer', 'Saad', 'Taimur', 'Junaid'];
+    const F = ['Ayesha', 'Fatima', 'Hira', 'Zainab', 'Maryam', 'Sana', 'Mahnoor', 'Iqra', 'Areeba', 'Noor', 'Kinza', 'Laiba'];
+    const L = ['Khan', 'Ahmed', 'Qureshi', 'Malik', 'Butt', 'Shah', 'Memon', 'Baloch', 'Khattak', 'Chaudhry', 'Siddiqui', 'Abbasi'];
+    const inst = { PB: ['Punjab University', 'LUMS', 'UET Lahore', 'GC University'], SD: ['University of Karachi', 'NED University', 'IBA Karachi', 'Mehran UET'], KP: ['University of Peshawar', 'UET Peshawar', 'Khyber Medical University'], BL: ['University of Balochistan', 'BUITEMS'], IS: ['NUST', 'Quaid-i-Azam University', 'COMSATS'], GB: ['Karakoram International University'], AJ: ['University of AJK', 'MUST Mirpur'] };
+    const W = { PB: 16, SD: 12, KP: 8, BL: 4, IS: 5, GB: 2, AJ: 3 };
+    const out = []; const seq = {};
+    Component.PROV.forEach(p => {
+      for (let i = 0; i < W[p.code]; i++) {
+        const g = r() < 0.5 ? 'Female' : 'Male';
+        const first = pick(g === 'Female' ? F : M), last = pick(L);
+        seq[p.code] = (seq[p.code] || 0) + 1;
+        const d = new Date(2026, 7, 1 + Math.floor(r() * 52));
+        const cn = String(Math.floor(r() * 9e12 + 1e12));
+        out.push({
+          id: `${p.code}-26-${String(seq[p.code]).padStart(4, '0')}`,
+          fullName: `${first} ${last}`, fatherName: `${pick(M)} ${last}`,
+          cnic: `${cn.slice(0, 5)}-${cn.slice(5, 12)}-${cn.slice(12)}`,
+          dob: `${2004 + Math.floor(r() * 5)}-0${1 + Math.floor(r() * 9)}-1${Math.floor(r() * 9)}`,
+          gender: g, phone: `03${Math.floor(r() * 50 + 10)}-${Math.floor(r() * 9e6 + 1e6)}`,
+          email: `${first.toLowerCase()}.${last.toLowerCase()}@mail.pk`,
+          province: p.code, city: pick(p.cities), address: `House ${Math.floor(r() * 300 + 1)}, Street ${Math.floor(r() * 40 + 1)}`,
+          level: pick(Component.LEVELS), program: pick(Component.PROGRAMS), institution: pick(inst[p.code]),
+          marks: String(Math.floor(r() * 35 + 60)), status: r() < 0.62 ? 'Verified' : 'Pending', ts: d.getTime(),
+        });
+      }
+    });
+    return out;
+  }
+
+  constructor(props) {
+    super(props);
+    const sf = props.startAs === 'studentForm';
+    this.state = {
+      screen: sf ? 'register' : 'login', qrCode: null, toast: '',
+      step: 0, form: { ...Component.EMPTY, province: 'PB' }, errors: {}, consent: false, lastSub: null,
+      students: Component.seed(), admins: Component.ADMINS.slice(),
+      login: { email: '', pw: '', error: '' }, adminId: null,
+      tab: 'overview', fRegion: 'all', fProg: 'all', fStatus: 'all', q: '', selId: null,
+      showAdd: false, na: { name: '', email: '', password: '', scope: 'PB' }, naError: '',
+    };
+    this.scrollRef = React.createRef();
+  }
+  componentDidMount() {
+    try {
+      const d = JSON.parse(localStorage.getItem('daakhla-v1') || 'null');
+      if (d) this.setState({ students: d.students || this.state.students, admins: d.admins || this.state.admins });
+    } catch (e) {}
+  }
+  componentDidUpdate(pp, ps) {
+    const s = this.state;
+    if (ps.students !== s.students || ps.admins !== s.admins) localStorage.setItem('daakhla-v1', JSON.stringify({ students: s.students, admins: s.admins }));
+    if (ps.step !== s.step || ps.screen !== s.screen || ps.tab !== s.tab) { if (this.scrollRef.current) this.scrollRef.current.scrollTop = 0; }
+  }
+
+  url(code) { return `daakhla.pk/r/${Component.CODES[code]}`; }
+  flash(msg) { clearTimeout(this._t); this.setState({ toast: msg }); this._t = setTimeout(() => this.setState({ toast: '' }), 1600); }
+  copy(code) { try { navigator.clipboard.writeText('https://' + this.url(code)); } catch (e) {} this.flash('Link copied'); }
+  openForm(code) { this.setState({ screen: 'register', step: 0, form: { ...Component.EMPTY, province: code }, errors: {}, consent: false, qrCode: null }); }
+  prov(code) { return Component.PROV.find(p => p.code === code); }
+  initials(n) { return n.split(' ').filter(Boolean).slice(0, 2).map(w => w[0].toUpperCase()).join(''); }
+  fmtDate(ts) { return new Date(ts).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }); }
+
+  setField(k, v) {
+    if (k === 'cnic') { const d = v.replace(/\D/g, '').slice(0, 13); v = d.length > 12 ? `${d.slice(0, 5)}-${d.slice(5, 12)}-${d.slice(12)}` : d.length > 5 ? `${d.slice(0, 5)}-${d.slice(5)}` : d; }
+    if (k === 'phone') { const d = v.replace(/\D/g, '').slice(0, 11); v = d.length > 4 ? `${d.slice(0, 4)}-${d.slice(4)}` : d; }
+    if (k === 'marks') v = v.replace(/[^\d.]/g, '').slice(0, 5);
+    this.setState(s => {
+      const form = { ...s.form, [k]: v };
+      if (k === 'province') form.city = '';
+      const errors = { ...s.errors }; delete errors[k];
+      return { form, errors };
+    });
+  }
+  validate(step) {
+    const f = this.state.form, e = {};
+    if (step === 0) {
+      if (f.fullName.trim().length < 3) e.fullName = 'Enter your full name';
+      if (!f.fatherName.trim()) e.fatherName = "Enter your father's name";
+      if (f.cnic.replace(/\D/g, '').length !== 13) e.cnic = 'CNIC / B-Form must be 13 digits';
+      if (!f.dob) e.dob = 'Select your date of birth';
+      if (!f.gender) e.gender = 'Select gender';
+    }
+    if (step === 1) {
+      if (!/^03\d{9}$/.test(f.phone.replace(/\D/g, ''))) e.phone = 'Use format 03XX-XXXXXXX';
+      if (!/^\S+@\S+\.\S+$/.test(f.email)) e.email = 'Enter a valid email';
+      if (!f.province) e.province = 'Select a province or region';
+      if (!f.city) e.city = 'Select a city';
+      if (f.address.trim().length < 5) e.address = 'Enter your address';
+    }
+    if (step === 2) {
+      if (!f.level) e.level = 'Select a level';
+      if (!f.program) e.program = 'Select a program category';
+      if (!f.institution.trim()) e.institution = 'Enter your institution';
+      const m = parseFloat(f.marks); if (isNaN(m) || m < 0 || m > 100) e.marks = 'Enter a percentage between 0 and 100';
+    }
+    if (step === 3 && !this.state.consent) e.consent = 'Please confirm your details';
+    return e;
+  }
+  next() {
+    const s = this.state, e = this.validate(s.step);
+    if (Object.keys(e).length) return this.setState({ errors: e });
+    if (s.step < 3) return this.setState({ step: s.step + 1, errors: {} });
+    const f = s.form, n = s.students.filter(x => x.province === f.province).length + 1;
+    const st = { ...f, fullName: f.fullName.trim(), id: `${f.province}-26-${String(n).padStart(4, '0')}`, status: 'Pending', ts: Date.now() };
+    this.setState({ students: [st, ...s.students], lastSub: st, screen: 'success' });
+  }
+  doLogin() {
+    const { email, pw } = this.state.login;
+    const a = this.state.admins.find(x => x.email.toLowerCase() === email.trim().toLowerCase() && x.password === pw);
+    if (!a) return this.setState({ login: { ...this.state.login, error: 'Email or password is incorrect' } });
+    this.setState({ adminId: a.id, screen: 'dash', tab: 'overview', fRegion: 'all', fProg: 'all', fStatus: 'all', q: '', login: { email: '', pw: '', error: '' } });
+  }
+  addAdmin() {
+    const na = this.state.na;
+    if (!na.name.trim() || !/^\S+@\S+\.\S+$/.test(na.email) || na.password.length < 4) return this.setState({ naError: 'Name, valid email and a 4+ character password are required' });
+    if (this.state.admins.some(a => a.email.toLowerCase() === na.email.toLowerCase())) return this.setState({ naError: 'An admin with this email already exists' });
+    const a = { ...na, id: 'a' + Date.now(), role: na.scope === 'all' ? 'Super admin' : 'Regional admin' };
+    this.setState(s => ({ admins: [...s.admins, a], showAdd: false, naError: '', na: { name: '', email: '', password: '', scope: 'PB' } }));
+  }
+
+  renderVals() {
+    const s = this.state, P = Component.PROV, f = s.form, e = s.errors;
+    const G = '#0E5A3A', LINE = '#E4E0D5';
+    const chip = (label, on, onClick) => ({ label, onClick, bg: on ? G : '#fff', fg: on ? '#fff' : '#14231C', bd: on ? G : LINE, dot: on ? '#fff' : 'transparent', bg2: on ? '#14231C' : '#EAE6DB', fg2: on ? '#fff' : '#3C4841' });
+    const h = {}; Object.keys(Component.EMPTY).forEach(k => { h[k] = ev => this.setField(k, ev.target.value); });
+    const bd = {}; Object.keys(Component.EMPTY).forEach(k => { bd[k] = e[k] ? '#B3261E' : LINE; });
+    const provOpts = P.map(p => ({ v: p.code, l: p.name }));
+    const cp = this.prov(f.province);
+    const sStyle = (st) => st === 'Verified' ? { stBg: '#E3EEE7', stFg: G } : { stBg: '#F6E7D2', stFg: '#8A4E0C' };
+
+    const admin = s.admins.find(a => a.id === s.adminId);
+    const scoped = admin ? s.students.filter(x => admin.scope === 'all' || x.province === admin.scope) : [];
+    const adminV = admin ? { ...admin, first: admin.name.split(' ')[0], initials: this.initials(admin.name), scopeLabel: admin.scope === 'all' ? 'All of Pakistan' : this.prov(admin.scope).name } : {};
+    const scopeShort = (sc) => sc === 'all' ? 'All regions' : this.prov(sc).short;
+
+    let regionRows = [], regionHeading = '';
+    if (admin) {
+      const byCity = admin.scope !== 'all';
+      regionHeading = byCity ? 'By city' : 'By province / region';
+      const keys = byCity ? this.prov(admin.scope).cities : P.map(p => p.code);
+      const rows = keys.map(k => ({ k, name: byCity ? k : this.prov(k).name, count: scoped.filter(x => (byCity ? x.city : x.province) === k).length }));
+      const max = Math.max(1, ...rows.map(r => r.count));
+      regionRows = rows.sort((a, b) => b.count - a.count).map(r => ({ ...r, pct: `${Math.round(r.count / max * 100)}%`, onClick: () => this.setState({ tab: 'students', fRegion: r.k, fProg: 'all', fStatus: 'all', q: '' }) }));
+    }
+    const programRows = Component.PROGRAMS.map(p => ({ name: p, count: scoped.filter(x => x.program === p).length, onClick: () => this.setState({ tab: 'students', fProg: p, fRegion: 'all', fStatus: 'all', q: '' }) }));
+
+    const cityScope = admin && admin.scope !== 'all';
+    const regionChips = [chip('All', s.fRegion === 'all', () => this.setState({ fRegion: 'all' }))].concat(
+      cityScope ? this.prov(admin.scope).cities.map(c => chip(c, s.fRegion === c, () => this.setState({ fRegion: c })))
+        : P.map(p => chip(p.short, s.fRegion === p.code, () => this.setState({ fRegion: p.code }))));
+    const progChips = [chip('All programs', s.fProg === 'all', () => this.setState({ fProg: 'all' }))]
+      .concat(Component.PROGRAMS.map(p => chip(p, s.fProg === p, () => this.setState({ fProg: p }))))
+      .concat([chip('Pending only', s.fStatus === 'Pending', () => this.setState({ fStatus: s.fStatus === 'Pending' ? 'all' : 'Pending' }))]);
+    const q = s.q.trim().toLowerCase();
+    const list = scoped.filter(x => (s.fRegion === 'all' || x.province === s.fRegion || x.city === s.fRegion) && (s.fProg === 'all' || x.program === s.fProg) && (s.fStatus === 'all' || x.status === s.fStatus)
+      && (!q || [x.fullName, x.id, x.cnic, x.institution].join(' ').toLowerCase().includes(q)));
+    const gm = {};
+    list.slice().sort((a, b) => b.ts - a.ts).forEach(x => { const k = x.province + '|' + x.city; (gm[k] = gm[k] || []).push(x); });
+    const groups = Object.entries(gm).sort((a, b) => b[1].length - a[1].length).map(([k, items]) => ({
+      city: items[0].city, province: this.prov(items[0].province).short, count: items.length,
+      items: items.map(x => ({ ...x, name: x.fullName, initials: this.initials(x.fullName), ...sStyle(x.status), onOpen: () => this.setState({ selId: x.id }) })),
+    }));
+
+    const selS = s.students.find(x => x.id === s.selId);
+    const sel = selS ? {
+      ...selS, name: selS.fullName, initials: this.initials(selS.fullName), date: this.fmtDate(selS.ts), ...sStyle(selS.status),
+      toggleLabel: selS.status === 'Verified' ? 'Mark pending' : 'Verify student',
+      onToggle: () => this.setState(st => ({ students: st.students.map(x => x.id === selS.id ? { ...x, status: x.status === 'Verified' ? 'Pending' : 'Verified' } : x) })),
+      sections: [
+        { title: 'Personal', rows: [{ k: "Father's name", v: selS.fatherName }, { k: 'CNIC / B-Form', v: selS.cnic }, { k: 'Date of birth', v: selS.dob }, { k: 'Gender', v: selS.gender }] },
+        { title: 'Contact & region', rows: [{ k: 'Mobile', v: selS.phone }, { k: 'Email', v: selS.email }, { k: 'City', v: selS.city }, { k: 'Province', v: this.prov(selS.province).name }, { k: 'Address', v: selS.address }] },
+        { title: 'Academic', rows: [{ k: 'Level', v: selS.level }, { k: 'Program', v: selS.program }, { k: 'Institution', v: selS.institution }, { k: 'Last result', v: selS.marks + '%' }] },
+      ],
+    } : null;
+
+    const tabDefs = [['overview', 'Overview', '◐'], ['students', 'Students', '≡'], ['links', 'Links', '⌗'], ['admins', 'Admins', '◎']];
+    const linkCodes = admin ? (admin.scope === 'all' ? P.map(p => p.code) : [admin.scope]) : [];
+    const links = linkCodes.map(c => ({
+      code: c, name: this.prov(c).name, url: this.url(c), qr: Component.qr(Component.CODES[c]),
+      count: scoped.filter(x => x.province === c).length, pending: scoped.filter(x => x.province === c && x.status === 'Pending').length,
+      onCopy: () => this.copy(c), onQr: () => this.setState({ qrCode: c }), onOpen: () => this.openForm(c),
+    }));
+    const qc = s.qrCode;
+    const qrSheet = qc ? { name: this.prov(qc).name, url: this.url(qc), qr: Component.qr(Component.CODES[qc]), onCopy: () => this.copy(qc), onSave: () => this.flash('QR image saved') } : null;
+    const tabs = tabDefs.map(([k, label, glyph]) => ({ label, glyph, fg: s.tab === k ? G : '#5E6B63', bg: s.tab === k ? '#E3EEE7' : 'transparent', onClick: () => this.setState({ tab: k, selId: null }) }));
+    const canManage = !!admin && admin.scope === 'all';
+    const naH = {}; ['name', 'email', 'password', 'scope'].forEach(k => { naH[k] = ev => { const v = ev.target.value; this.setState(st => ({ na: { ...st.na, [k]: v }, naError: '' })); }; });
+    const goStep = (n) => () => this.setState({ step: n, errors: {} });
+
+    return {
+      links, qrSheet, closeQr: () => this.setState({ qrCode: null }), toast: s.toast,
+      formLink: { url: this.url(f.province || 'PB'), region: (this.prov(f.province) || P[0]).name },
+      isPreview: !!admin, showBack: s.step > 0,
+      exitPreview: () => this.setState({ screen: admin ? 'dash' : 'login', tab: 'links' }),
+      submitAnother: () => this.openForm(s.lastSub ? s.lastSub.province : f.province),
+      is: { register: s.screen === 'register', success: s.screen === 'success', login: s.screen === 'login', dash: s.screen === 'dash' },
+      scrollRef: this.scrollRef,
+      stats: { all: s.students.length, cityCount: P.reduce((n, p) => n + p.cities.length, 0), total: scoped.length, pending: scoped.filter(x => x.status === 'Pending').length, verified: scoped.filter(x => x.status === 'Verified').length },
+      startRegister: () => this.setState({ screen: 'register', step: 0, form: { ...Component.EMPTY }, errors: {}, consent: false }),
+      goLogin: () => this.setState({ screen: 'login' }),
+      goWelcome: () => this.setState({ screen: 'welcome' }),
+      back: () => s.step === 0 ? this.setState({ screen: 'welcome' }) : this.setState({ step: s.step - 1, errors: {} }),
+      next: () => this.next(),
+      stepNum: s.step + 1, stepTitle: Component.STEPS[s.step],
+      nextLabel: s.step === 3 ? 'Submit registration' : 'Continue',
+      progress: [0, 1, 2, 3].map(i => ({ bg: i <= s.step ? G : '#DDD8CB' })),
+      st: { s0: s.step === 0, s1: s.step === 1, s2: s.step === 2, s3: s.step === 3 },
+      f, e, h, bd, provOpts,
+      genderOpts: ['Female', 'Male'].map(g => chip(g, f.gender === g, () => this.setField('gender', g))),
+      cityOpts: cp ? cp.cities.map(c => chip(c, f.city === c, () => this.setField('city', c))) : [],
+      hasCityOpts: !!cp, noCityOpts: !cp,
+      levelOpts: Component.LEVELS.map(l => chip(l, f.level === l, () => this.setField('level', l))),
+      programOpts: Component.PROGRAMS.map(p => chip(p, f.program === p, () => this.setField('program', p))),
+      review: [
+        { title: 'Personal', onEdit: goStep(0), rows: [{ k: 'Name', v: f.fullName }, { k: "Father's name", v: f.fatherName }, { k: 'CNIC / B-Form', v: f.cnic }, { k: 'Date of birth', v: f.dob }, { k: 'Gender', v: f.gender }] },
+        { title: 'Contact & region', onEdit: goStep(1), rows: [{ k: 'Mobile', v: f.phone }, { k: 'Email', v: f.email }, { k: 'City', v: f.city }, { k: 'Province', v: cp ? cp.name : '' }, { k: 'Address', v: f.address }] },
+        { title: 'Academic', onEdit: goStep(2), rows: [{ k: 'Level', v: f.level }, { k: 'Program', v: f.program }, { k: 'Institution', v: f.institution }, { k: 'Last result', v: f.marks ? f.marks + '%' : '' }] },
+      ],
+      toggleConsent: () => this.setState(st => { const errors = { ...st.errors }; delete errors.consent; return { consent: !st.consent, errors }; }),
+      consentBg: s.consent ? G : '#fff', consentBd: s.consent ? G : (e.consent ? '#B3261E' : '#C9C3B4'),
+      lastSub: s.lastSub ? { ...s.lastSub, first: s.lastSub.fullName.split(' ')[0], province: this.prov(s.lastSub.province).name } : {},
+      login: s.login, loginBd: s.login.error ? '#B3261E' : LINE,
+      onLoginEmail: ev => this.setState({ login: { ...s.login, email: ev.target.value, error: '' } }),
+      onLoginPw: ev => this.setState({ login: { ...s.login, pw: ev.target.value, error: '' } }),
+      doLogin: () => this.doLogin(),
+      showDemo: this.props.showDemoAccounts ?? true,
+      demoAdmins: s.admins.map(a => ({ ...a, initials: this.initials(a.name), scopeShort: scopeShort(a.scope), onFill: () => this.setState({ login: { email: a.email, pw: a.password, error: '' } }) })),
+      admin: adminV,
+      tab: { overview: s.tab === 'overview', students: s.tab === 'students', links: s.tab === 'links', admins: s.tab === 'admins' },
+      tabs, regionRows, regionHeading, programRows,
+      viewPending: () => this.setState({ tab: 'students', fStatus: 'Pending', fRegion: 'all', fProg: 'all', q: '' }),
+      regionChips, progChips, q: s.q, onSearch: ev => this.setState({ q: ev.target.value }),
+      groups, listCount: list.length, noResults: list.length === 0,
+      sel, closeSel: () => this.setState({ selId: null }),
+      logout: () => this.setState({ adminId: null, screen: 'login', selId: null }),
+      adminRows: s.admins.map(a => ({ ...a, initials: this.initials(a.name), scopeShort: scopeShort(a.scope), you: a.id === s.adminId ? ' (you)' : '' })),
+      adminCount: s.admins.length, canManage, cantManage: !!admin && !canManage,
+      showAdd: s.showAdd && canManage, addLabel: s.showAdd ? 'Cancel' : '+ Add admin',
+      toggleAdd: () => this.setState(st => ({ showAdd: !st.showAdd, naError: '' })),
+      na: s.na, naH, naError: s.naError, addAdmin: () => this.addAdmin(),
+    };
+  }
+}
+</script>
+</body>
+</html>
